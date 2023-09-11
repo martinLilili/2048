@@ -135,4 +135,42 @@ class GameViewController: UIViewController, GameBoardViewDelegate, GameLogicMana
     func gameOverControllerDidTapRestart() {
         restart()
     }
+    
+    
+    private var startLocation: CGPoint = CGPointZero
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        startLocation = touch.location(in: self.view)
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        let newLocation = touch.location(in: self.view)
+        let prevLocation = startLocation
+        
+        var directionX: ShiftDirection!
+        if newLocation.x > prevLocation.x {
+            directionX = .Right
+        } else {
+            directionX = .Left
+        }
+        
+        var directionY: ShiftDirection!
+        if newLocation.y > prevLocation.y {
+            directionY = .Down
+        } else {
+            directionY = .Up
+        }
+        
+        var direction: ShiftDirection!
+        if abs(newLocation.x - prevLocation.x) > abs(newLocation.y - prevLocation.y) {
+            direction = directionX
+        } else {
+            direction = directionY
+        }
+        
+        gameManager.shift(direction: direction)
+        
+    }
 }

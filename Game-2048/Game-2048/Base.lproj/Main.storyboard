@@ -100,19 +100,19 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view autoresizesSubviews="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w8u-FS-F73" customClass="GameBoardView" customModule="Game_2048" customModuleProvider="target">
-                                <rect key="frame" x="178" y="178" width="244" height="244"/>
+                                <rect key="frame" x="178" y="178" width="300" height="300"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="game-board-bg" translatesAutoresizingMaskIntoConstraints="NO" id="0cd-x5-vDP">
-                                        <rect key="frame" x="0.0" y="0.0" width="244" height="244"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="0cd-x5-vDP" firstAttribute="top" secondItem="w8u-FS-F73" secondAttribute="top" id="6Cu-Cn-KTL"/>
-                                    <constraint firstAttribute="height" constant="244" id="6M8-fZ-9kt"/>
+                                    <constraint firstAttribute="height" constant="300" id="6M8-fZ-9kt"/>
                                     <constraint firstAttribute="bottom" secondItem="0cd-x5-vDP" secondAttribute="bottom" id="8dB-te-etI"/>
                                     <constraint firstItem="0cd-x5-vDP" firstAttribute="leading" secondItem="w8u-FS-F73" secondAttribute="leading" id="IBj-Sm-pxb"/>
                                     <constraint firstAttribute="trailing" secondItem="0cd-x5-vDP" secondAttribute="trailing" id="TkW-tk-l5l"/>
-                                    <constraint firstAttribute="width" constant="244" id="r7X-FT-HpJ"/>
+                                    <constraint firstAttribute="width" constant="300" id="r7X-FT-HpJ"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GQx-vF-PjO">

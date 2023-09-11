@@ -99,6 +99,6 @@ class GameBoardRenderer {
     }
     
     private var tileSize: CGSize {
-        return CGSize(width: 55, height: 55)
+        return CGSize(width: 69, height: 69)
     }
 }
