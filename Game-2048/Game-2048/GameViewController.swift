@@ -10,6 +10,7 @@ import UIKit
 
 class GameViewController: UIViewController, GameBoardViewDelegate, GameLogicManagerDelegate, GameOverViewControllerDelegate {
 
+
     enum SegueIdentifier: String {
         case GameOver = "GameOver"
     }
@@ -40,31 +41,31 @@ class GameViewController: UIViewController, GameBoardViewDelegate, GameLogicMana
         finishButton.styleLight()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateScores()
     }
     
     private func gameOver() {
         saveHighScore()
-        self.performSegueWithIdentifier(SegueIdentifier.GameOver.rawValue, sender: nil)
+        self.performSegue(withIdentifier: SegueIdentifier.GameOver.rawValue, sender: nil)
     }
     
     private func userWin() {
         win = true
         saveHighScore()
-        self.performSegueWithIdentifier(SegueIdentifier.GameOver.rawValue, sender: nil)
+        self.performSegue(withIdentifier: SegueIdentifier.GameOver.rawValue, sender: nil)
     }
     
     private func saveHighScore() {
-        if NSUserDefaults.standardUserDefaults().highScore() < currentScore {
-            NSUserDefaults.standardUserDefaults().saveHighScore(currentScore)
+        if UserDefaults.standard.highScore() < currentScore {
+            UserDefaults.standard.saveHighScore(score: currentScore)
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SegueIdentifier.GameOver.rawValue {
-            let gameOverViewController = segue.destinationViewController as! GameOverViewController
+            let gameOverViewController = segue.destination as! GameOverViewController
             gameOverViewController.score = currentScore
             gameOverViewController.delegate = self
             gameOverViewController.win = win
@@ -72,48 +73,48 @@ class GameViewController: UIViewController, GameBoardViewDelegate, GameLogicMana
     }
     
     private func updateScores() {
-        currentScoreLabel.attributedText = viewModel.scoreText(currentScore)
-        bestScoreLabel.attributedText = viewModel.bestScoreText(highScore)
+        currentScoreLabel.attributedText = viewModel.scoreText(points: currentScore)
+        bestScoreLabel.attributedText = viewModel.bestScoreText(points: highScore)
     }
     
     private func restart() {
         renderer.reset()
         currentScore = 0
-        highScore = NSUserDefaults.standardUserDefaults().highScore()
+        highScore = UserDefaults.standard.highScore()
         updateScores()
         gameManager.startGame()
     }
     
     @IBAction func restartPressed(sender: AnyObject) {
-        let alertController = UIAlertController(title: "Restart Game", message: "Are you sure?", preferredStyle: .Alert)
-        alertController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { _ in self.restart() }))
-        self.presentViewController(alertController, animated: true, completion: nil)
+        let alertController = UIAlertController(title: "Restart Game", message: "Are you sure?", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in self.restart() }))
+        self.present(alertController, animated: true, completion: nil)
     }
     
     @IBAction func finishPressed(sender: AnyObject) {
-        let alertController = UIAlertController(title: "Finish Game", message: "Are you sure?", preferredStyle: .Alert)
-        alertController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { _ in self.gameOver() }))
-        self.presentViewController(alertController, animated: true, completion: nil)
+        let alertController = UIAlertController(title: "Finish Game", message: "Are you sure?", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in self.gameOver() }))
+        self.present(alertController, animated: true, completion: nil)
     }
     
     // MARK: GameBoardViewDelegate
     func gameBoardView(view: GameBoardView, didSwipeInDirection direction: ShiftDirection) {
-        gameManager.shift(direction)
+        gameManager.shift(direction: direction)
     }
     
     // MARK: GameLogicManagerDelegate
     func gameLogicManagerDidAddTile(tile: Tile?) {
-        if let tile = tile { renderer.addTile(tile) }
+        if let tile = tile { renderer.addTile(tile: tile) }
     }
     
-    func gameLogicManagerDidMoveTile(sourceTile: Tile, onTile destinationTile: Tile, completionBlock: (Void) -> Void) {
-        renderer.moveTile(sourceTile, onTile: destinationTile, completionBlock: completionBlock)
+    func gameLogicManagerDidMoveTile(sourceTile: Tile, onTile destinationTile: Tile, completionBlock: @escaping() -> Void) {
+        renderer.moveTile(sourceTile: sourceTile, onTile: destinationTile, completionBlock: completionBlock)
     }
     
-    func gameLogicManagerDidMoveTile(tile: Tile, position: Position, completionBlock: (Void) -> Void) {
-        renderer.moveTile(tile, position: position, completionBlock: completionBlock)
+    func gameLogicManagerDidMoveTile(tile: Tile, position: Position, completionBlock: @escaping() -> Void) {
+        renderer.moveTile(tile: tile, position: position, completionBlock: completionBlock)
     }
     
     func gameLogicManagerDidCountPoints(points: Int) {

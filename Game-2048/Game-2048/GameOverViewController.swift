@@ -35,10 +35,10 @@ class GameOverViewController: UIViewController {
     
     @IBAction func restartPressed(sender: AnyObject) {
         delegate?.gameOverControllerDidTapRestart()
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func finishPressed(sender: AnyObject) {
-        UIApplication.sharedApplication().keyWindow?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+        UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }

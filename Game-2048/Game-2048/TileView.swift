@@ -13,7 +13,7 @@ class TileView: UIView {
     var position: Position = Position(x: 0, y: 0)
     
     class func createView() -> TileView {
-        let nibContent = UINib(nibName: "TileView", bundle: nil).instantiateWithOwner(nil, options: nil)
+        let nibContent = UINib(nibName: "TileView", bundle: nil).instantiate(withOwner: nil, options: nil)
         let view = nibContent.first as! TileView
         view.layer.cornerRadius = 6.0
         return view

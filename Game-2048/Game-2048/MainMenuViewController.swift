@@ -22,19 +22,19 @@ class MainMenuViewController: UIViewController {
         newGameButton.styleLight()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let highScore = NSUserDefaults.standardUserDefaults().highScore()
+        let highScore = UserDefaults.standard.highScore()
         let viewModel = MainMenuViewModel(points: highScore)
         highScoreLabel.attributedText = viewModel.highScoreText
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let segueIdentifier = segue.identifier {
             switch SegueIdentifier(rawValue: segueIdentifier)! {
             case .NewGame:
-                let gameViewController = segue.destinationViewController as! GameViewController
-                gameViewController.highScore = NSUserDefaults.standardUserDefaults().highScore()
+                let gameViewController = segue.destination as! GameViewController
+                gameViewController.highScore = UserDefaults.standard.highScore()
             }
         }
     }

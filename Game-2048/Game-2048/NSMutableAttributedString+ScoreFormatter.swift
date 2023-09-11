@@ -14,7 +14,7 @@ extension NSMutableAttributedString {
         let pointsString = "\(points)"
         let text = "\(text): \(points)"
         let attributed = NSMutableAttributedString(string: text)
-        attributed.setAttributes([NSForegroundColorAttributeName: AppColor.Yellow.color], range: NSMakeRange(count(text) - count(pointsString), count(pointsString)))
+        attributed.setAttributes([NSAttributedString.Key.foregroundColor: AppColor.Yellow.color], range: NSMakeRange(text.count - pointsString.count, pointsString.count))
         return attributed
     }
 }

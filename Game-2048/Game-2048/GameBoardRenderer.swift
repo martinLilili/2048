@@ -22,7 +22,7 @@ class GameBoardRenderer {
             view.removeFromSuperview()
         }
         
-        tileViews.removeAll(keepCapacity: true)
+        tileViews.removeAll(keepingCapacity: true)
     }
     
     func addTile(tile: Tile) {
@@ -35,16 +35,16 @@ class GameBoardRenderer {
         tileView.valueLabel.alpha = 0
         
         tileView.frame = CGRectZero
-        tileView.center = centerForTile(tile.position)
+        tileView.center = centerForTile(position: tile.position)
         
         boardView!.addSubview(tileView)
         
-        UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
             var bounds = tileView.bounds
             bounds.size = self.tileSize
             tileView.bounds = bounds
             }) { _ in
-                UIView.animateWithDuration(0.15) {
+                UIView.animate(withDuration: 0.15) {
                     tileView.valueLabel.alpha = 1
                 }
         }
@@ -52,12 +52,12 @@ class GameBoardRenderer {
         tileViews.append(tileView)
     }
     
-    func moveTile(sourceTile: Tile, onTile destinationTile: Tile, completionBlock: (Void) -> Void) {
+    func moveTile(sourceTile: Tile, onTile destinationTile: Tile, completionBlock: @escaping() -> Void) {
         let sourceTileView = tileViews.filter({$0.position == sourceTile.position}).first!
         let destinationTileView = tileViews.filter({$0.position == destinationTile.position}).first!
         boardView?.bringSubviewToFront(sourceTileView)
         
-        UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
             sourceTileView.center = destinationTileView.center
             sourceTileView.position = destinationTile.position
             destinationTileView.alpha = 0
@@ -70,18 +70,21 @@ class GameBoardRenderer {
             destinationTileView.alpha = 0
             destinationTileView.removeFromSuperview()
             
-            let index = find(self.tileViews, destinationTileView)
-            self.tileViews.removeAtIndex(index!)
+            let index = self.tileViews.firstIndex(of: destinationTileView)
+            self.tileViews.remove(at: index!)
             completionBlock()
         }
     }
     
-    func moveTile(tile: Tile, position: Position, completionBlock: (Void) -> Void) {
+    func moveTile(tile: Tile, position: Position, completionBlock: @escaping() -> Void) {
         let tileView = tileViews.filter({$0.position == tile.position}).first!
-        UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-            tileView.center = self.centerForTile(position)
+        UIView.animate(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
+            tileView.center = self.centerForTile(position: position)
             tileView.position = position
-            }) { _ in completionBlock() }
+            }) { _ in
+                completionBlock()
+                
+            }
     }
     
     private func centerForTile(position: Position) -> CGPoint {

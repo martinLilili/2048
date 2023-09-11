@@ -8,23 +8,23 @@
 
 import Foundation
 
-extension NSUserDefaults {
+extension UserDefaults {
     
     enum Key: String {
         case HighScore = "HighScore"
     }
     
     func registerDefaults() {
-        NSUserDefaults.standardUserDefaults().registerDefaults([Key.HighScore.rawValue: NSNumber(integer: 0)])
+        UserDefaults.standard.register(defaults: [Key.HighScore.rawValue: NSNumber(value: 0)])
     }
     
     func highScore() -> Int {
-        return NSUserDefaults.standardUserDefaults().integerForKey(Key.HighScore.rawValue)
+        return UserDefaults.standard.integer(forKey: Key.HighScore.rawValue)
     }
     
     func saveHighScore(score: Int) {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setInteger(score, forKey: Key.HighScore.rawValue)
+        let defaults = UserDefaults.standard
+        defaults.set(score, forKey: Key.HighScore.rawValue)
         defaults.synchronize()
     }
 }

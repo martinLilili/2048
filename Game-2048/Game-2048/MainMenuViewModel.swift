@@ -16,6 +16,6 @@ class MainMenuViewModel {
     }
     
     var highScoreText: NSAttributedString {
-        return NSMutableAttributedString.scoreDescription("HIGH SCORE", points: points)
+        return NSMutableAttributedString.scoreDescription(text: "HIGH SCORE", points: points)
     }
 }

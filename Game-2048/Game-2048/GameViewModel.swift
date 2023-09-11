@@ -11,10 +11,10 @@ import Foundation
 class GameViewModel {
     
     func bestScoreText(points: Int) -> NSAttributedString {
-        return NSMutableAttributedString.scoreDescription("BEST", points: points)
+        return NSMutableAttributedString.scoreDescription(text: "BEST", points: points)
     }
     
     func scoreText(points: Int) -> NSAttributedString {
-        return NSMutableAttributedString.scoreDescription("SCORE", points: points)
+        return NSMutableAttributedString.scoreDescription(text: "SCORE", points: points)
     }
 }

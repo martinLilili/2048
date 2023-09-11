@@ -17,14 +17,14 @@ class GameBoardView: UIView {
     var delegate: GameBoardViewDelegate?
     private var startLocation: CGPoint = CGPointZero
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        let touch = touches.first as! UITouch
-        startLocation = touch.locationInView(self)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        startLocation = touch.location(in: self)
     }
 
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        let touch = touches.first as! UITouch
-        let newLocation = touch.locationInView(self)
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        let newLocation = touch.location(in: self)
         let prevLocation = startLocation
         
         var directionX: ShiftDirection!
@@ -48,6 +48,6 @@ class GameBoardView: UIView {
             direction = directionY
         }
         
-        delegate?.gameBoardView(self, didSwipeInDirection: direction)
+        delegate?.gameBoardView(view: self, didSwipeInDirection: direction)
     }
 }

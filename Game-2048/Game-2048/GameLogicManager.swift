@@ -11,8 +11,8 @@ import CoreGraphics
 
 protocol GameLogicManagerDelegate {
     func gameLogicManagerDidAddTile(tile: Tile?)
-    func gameLogicManagerDidMoveTile(sourceTile: Tile, onTile destinationTile: Tile, completionBlock: (Void) -> Void)
-    func gameLogicManagerDidMoveTile(tile: Tile, position: Position, completionBlock: (Void) -> Void)
+    func gameLogicManagerDidMoveTile(sourceTile: Tile, onTile destinationTile: Tile, completionBlock: @escaping() -> Void)
+    func gameLogicManagerDidMoveTile(tile: Tile, position: Position, completionBlock: @escaping() -> Void)
     func gameLogicManagerDidCountPoints(points: Int)
     func gameLogicManagerDidGameOver()
     func gameLogicManagerDidWinGame()
@@ -33,7 +33,7 @@ class GameLogicManager {
     
     private func prepare() {
         updating = false
-        tiles.removeAll(keepCapacity: true)
+        tiles.removeAll(keepingCapacity: true)
         for row in 0..<boardWidth {
             for column in 0..<boardWidth {
                 tiles.append(Tile(position: Position(x: row, y: column)))
@@ -46,8 +46,8 @@ class GameLogicManager {
         pointCount = 0
         prepare()
         
-        delegate?.gameLogicManagerDidAddTile(addRandomTile())
-        delegate?.gameLogicManagerDidAddTile(addRandomTile())
+        delegate?.gameLogicManagerDidAddTile(tile: addRandomTile())
+        delegate?.gameLogicManagerDidAddTile(tile: addRandomTile())
     }
     
     func shift(direction: ShiftDirection) {
@@ -71,7 +71,7 @@ class GameLogicManager {
             
             // When shifting right or down array need to be reversed.
             if direction == .Right || direction == .Down {
-                tilesToCheck = tilesToCheck.reverse()
+                tilesToCheck = tilesToCheck.reversed()
             }
             
             var tileIndex = 0
@@ -79,7 +79,7 @@ class GameLogicManager {
                 let currentTile = tilesToCheck[tileIndex]
                 // Find first tile with some value. When shifting right filter 
                 // seeks for tiles on the left, otherwise on the right from current tile.
-                let filter: ((tile: Tile) -> Bool) = { tile in
+                let filter: ((_ tile: Tile) -> Bool) = { tile in
                     let position: Bool = {
                         switch direction {
                         case .Up: return tile.position.y > currentTile.position.y
@@ -97,7 +97,7 @@ class GameLogicManager {
                     // remove value from other tile.
                     if otherTile.value == currentTile.value {
                         waitForSignalToContinue = true
-                        moveOnSameTile(otherTile, onTile: currentTile)
+                        moveOnSameTile(sourceTile: otherTile, onTile: currentTile)
                         // Notify about additional points because of adding up values
                         pointCount += currentTile.value!
                         // If current tile get's win tile value just end the game.
@@ -105,26 +105,26 @@ class GameLogicManager {
                             delegate?.gameLogicManagerDidWinGame()
                             return
                         }
-                        delegate?.gameLogicManagerDidCountPoints(pointCount)
+                        delegate?.gameLogicManagerDidCountPoints(points: pointCount)
                         performedShift = true
                     } else if currentTile.value == nil {
                         waitForSignalToContinue = true
-                        moveOnEmptyTile(otherTile, destinationTile: currentTile)
+                        moveOnEmptyTile(sourceTile: otherTile, destinationTile: currentTile)
                         // if tile has been moved to another place repeat this step
                         // because maybe next tile has the same value and they
                         // should be added up.
-                        tileIndex--
+                        tileIndex -= 1
                         performedShift = true
                     }
                 }
-                tileIndex++
+                tileIndex += 1
             }
         }
         
         // Every shift method returns boolean value if shift has been performed on
         // some at least one tile or not.
         if performedShift {
-            delegate?.gameLogicManagerDidAddTile(addRandomTile())
+            delegate?.gameLogicManagerDidAddTile(tile: addRandomTile())
         }
         
         if isGameOver() == true { delegate?.gameLogicManagerDidGameOver() }
@@ -137,7 +137,7 @@ class GameLogicManager {
     private func moveOnSameTile(sourceTile: Tile, onTile destinationTile: Tile) {
         destinationTile.value! *= 2
         sourceTile.value = nil
-        delegate?.gameLogicManagerDidMoveTile(sourceTile, onTile: destinationTile) {
+        delegate?.gameLogicManagerDidMoveTile(sourceTile: sourceTile, onTile: destinationTile) {
             self.updating = false
         }
     }
@@ -145,7 +145,7 @@ class GameLogicManager {
     private func moveOnEmptyTile(sourceTile: Tile, destinationTile: Tile) {
         destinationTile.value = sourceTile.value
         sourceTile.value = nil
-        delegate?.gameLogicManagerDidMoveTile(sourceTile, position: destinationTile.position) {
+        delegate?.gameLogicManagerDidMoveTile(tile: sourceTile, position: destinationTile.position) {
             self.updating = false
         }
     }
@@ -166,7 +166,7 @@ class GameLogicManager {
     private func addRandomTile() -> Tile? {
         // If found position then create tile
         if let position = randomPosition() {
-            let tile = tileForPosition(position)
+            let tile = tileForPosition(position: position)
             tile.value = 2
             return tile
         }
@@ -187,22 +187,22 @@ class GameLogicManager {
         for tile in tiles {
             let up = Position(x: tile.position.x, y: tile.position.y - 1)
             if CGRectContainsPoint(boardRect, up.CGPointRepresentation) {
-                tile.upTile = tileForPosition(up)
+                tile.upTile = tileForPosition(position: up)
             }
             
             let right = Position(x: tile.position.x + 1, y: tile.position.y)
             if CGRectContainsPoint(boardRect, right.CGPointRepresentation) {
-                tile.rightTile = tileForPosition(right)
+                tile.rightTile = tileForPosition(position: right)
             }
             
             let bottom = Position(x: tile.position.x, y: tile.position.y + 1)
             if CGRectContainsPoint(boardRect, bottom.CGPointRepresentation) {
-                tile.bottomTile = tileForPosition(bottom)
+                tile.bottomTile = tileForPosition(position: bottom)
             }
             
             let left = Position(x: tile.position.x - 1, y: tile.position.y)
             if CGRectContainsPoint(boardRect, left.CGPointRepresentation) {
-                tile.leftTile = tileForPosition(left)
+                tile.leftTile = tileForPosition(position: left)
             }
         }
     }
