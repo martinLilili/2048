@@ -17,7 +17,49 @@ class TileViewModel {
     }
     
     var valueText: String {
+        if value == 2 {
+            return "小白"
+        }
+        if value == 4 {
+            return "占卜家"
+        }
+        if value == 8 {
+            return "小丑"
+        }
+        if value == 16 {
+            return "魔术师"
+        }
+        if value == 32 {
+            return "无面人"
+        }
+        if value == 64 {
+            return "秘偶大师"
+        }
+        if value == 128 {
+            return "诡法师"
+        }
+        if value == 256 {
+            return "古代学者"
+        }
+        if value == 512 {
+            return "奇迹师"
+        }
+        if value == 1024 {
+            return "诡秘侍者"
+        }
+        if value == 2048 {
+            return "愚者"
+        }
+        
         return "\(value)"
+    }
+    
+    var textFont : UIFont {
+        if valueText.count > 3 {
+            return UIFont.systemFont(ofSize: 16)
+        } else {
+            return UIFont.systemFont(ofSize: 20)
+        }
     }
     
     var backgroundColor: UIColor {

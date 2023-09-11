@@ -32,6 +32,7 @@ class GameBoardRenderer {
         let viewModel = TileViewModel(value: tile.value!)
         tileView.valueLabel.text = viewModel.valueText
         tileView.backgroundColor = viewModel.backgroundColor
+        tileView.valueLabel.font = viewModel.textFont
         tileView.valueLabel.alpha = 0
         
         tileView.frame = CGRectZero
@@ -65,6 +66,7 @@ class GameBoardRenderer {
             let viewModel = TileViewModel(value: destinationTile.value!)
             sourceTileView.valueLabel.text = viewModel.valueText
             sourceTileView.backgroundColor = viewModel.backgroundColor
+            sourceTileView.valueLabel.font = viewModel.textFont
 
         }) { (finished) -> Void in
             destinationTileView.alpha = 0
